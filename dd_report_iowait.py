@@ -176,8 +176,13 @@ def database_setup(db_conn):
     db_conn.commit()
 
 
-def get_curr_timestamp():
-    return
+def check_st_time(start_date, end_date):
+    st = int(start_date)
+    et = int(end_date)
+    if et > st:
+        return start_date
+    else:
+        return str(et - 604800)
 
 
 @click.command()
@@ -186,7 +191,7 @@ def get_curr_timestamp():
 @click.option('--start-date', type=str, default=str(int(time())-604800))
 @click.option('--output', type=str, default="db")
 def main(app_src, start_date, end_date, output):
-    print(app_src, start_date, end_date, output)
+    start_date = check_st_time(start_date, end_date)
     db = sqlite3.connect("dd_report_iowait.sqlite")
     database_setup(db)
     print("scope,app_name,number_of_fails,IOWaitEvents")
